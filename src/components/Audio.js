@@ -6,7 +6,6 @@ const Audio = () => {
     const audioRef = useRef(null);
 
     const [progresss, setProgress] = useState(0);
-    const [time, setTime] = useState(0);
 
     const logAudio = () => {
         setProgress(

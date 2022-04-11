@@ -3,12 +3,11 @@ import { Row, Col, Container } from "react-bootstrap";
 import {useRef} from "react";
 import audio from "./media/569776__theoter__emotional-orchestra.wav";
 import styled from "styled-components";
-import {Form, Button} from 'react-bootstrap';
 import TranscriptionText from "./components/TranscriptionText";
 
 function App() {
 
-  {/* Styled Components */}
+
   const TextContent = styled.div`
     height: 100%;
   `;
@@ -19,18 +18,15 @@ function App() {
     overflow: auto;
     height: 256px;
     scroll-behavior: smooth;
-    transition-timing-function: ease-in-out;
+    transition: linear 2s;
   `;
-
-  {/* Hooks and functions */}
 
   const audioRef = useRef(null);
   const textRef = useRef(null);
 
   const logAudio = () => {
     var audioProgress = ((audioRef.current.currentTime / audioRef.current.duration) * 100);
-    var scrollRatio = (textRef.current.scrollTopMax / 100);
-    textRef.current.scrollTop = audioProgress * scrollRatio;
+    textRef.current.scrollTop = audioProgress * (textRef.current.scrollTopMax / 100);
   };
 
   return (
