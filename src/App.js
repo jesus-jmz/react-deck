@@ -1,66 +1,25 @@
 import "./App.css";
-import { Row, Col, Container } from "react-bootstrap";
-import {useRef} from "react";
-import audio from "./media/569776__theoter__emotional-orchestra.wav";
-import styled from "styled-components";
-import TranscriptionText from "./components/TranscriptionText";
+import { Container } from "react-bootstrap";
+import Nav from "./components/Nav";
+import AudioText from "./components/AudioText";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Notas from "./components/Notas";
+import useFetch from "./hooks/useFetch";
 
 function App() {
-
-
-  const TextContent = styled.div`
-    height: 100%;
-  `;
-
-  const TextBlock = styled.div`
-    position: static;
-    display: flex;
-    overflow: auto;
-    height: 256px;
-    scroll-behavior: smooth;
-    transition: linear 2s;
-  `;
-
-  const audioRef = useRef(null);
-  const textRef = useRef(null);
-
-  const logAudio = () => {
-    var audioProgress = ((audioRef.current.currentTime / audioRef.current.duration) * 100);
-    textRef.current.scrollTop = audioProgress * (textRef.current.scrollTopMax / 100);
-  };
+  
+  const {data: notas, error} = useFetch("http://localhost:3030/notas");
 
   return (
     <Container>
-      <h1>Audio Text</h1>
-      <Row>
-        <Col md={6}>
-          <h4>Audio</h4>
-          <audio
-            onTimeUpdate={logAudio}
-            ref={audioRef}
-            controls
-            controlsList="nodownload"
-          >
-            <source src={audio} />
-          </audio>
-        </Col>
-
-        <Col md={6}>
-          <div>
-            <h4 className="subtiitle">Transcripción</h4>
-            <TextBlock ref={textRef} className="text-block">
-              <TextContent className="text-content body">
-                <TranscriptionText />
-                <div className="d-flex justify-content-center align-items-center">
-                  <a className="btn btn-primary mt-2" href="#" target="_blank">
-                    Descargar Transcripción
-                  </a>
-                </div>
-              </TextContent>
-            </TextBlock>
-          </div>
-        </Col>
-      </Row>
+      <Router>
+        <Nav />
+        <Routes>
+          <Route path={"/"} element={<AudioText notas={notas} error={error}/>}/>
+          <Route path={"/notas"} element={<Notas notas={notas} error={error}/>}/>
+        </Routes>
+      </Router>
+      
     </Container>
   );
 }
